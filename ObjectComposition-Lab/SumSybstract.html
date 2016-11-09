@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<input type="text" id="num1" />
+<input type="text" id="num2" />
+<input type="text" id="result" readonly />
+<br>
+<button id="sumButton">
+    Sum</button>
+<button id="subtractButton">
+    Subtract</button>
+<script>
+    function result() {
+        let model = (function () {
+            let numA, numB, result;
+            function init(selectorA, selectorB, resultSelector) {
+                numA = $('#' + selectorA);
+                numB = $('#' + selectorB);
+                result = $('#' + resultSelector);
+            }
+
+            function add() {
+                performAction((a, b) => a + b);
+            }
+
+            function subtract() {
+                performAction((a, b) => a - b);
+            }
+
+            function performAction(action) {
+                let res = action(Number(numA.val()), Number(numB.val()));
+                result.val(res);
+            }
+
+            return {init, add, subtract}
+        })();
+        model.init('num1', 'num2', 'result');
+        $('#sumButton').click(model.add);
+        $('#subtractButton').click(model.subtract);
+    }
+    $(function () {
+        result()
+    })
+</script>
+</body>
+</html>
