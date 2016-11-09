@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <style>
+        td, th { background: #DDD; padding: 5px 10px }
+        input[type='text'] { width: 60px }
+    </style>
+</head>
+<body>
+
+<table id="countriesTable">
+    <tr><th>Country</th><th>Capital</th><th>Action</th></tr>
+    <tr><td><input type="text" id="newCountryText" /></td>
+        <td><input type="text" id="newCapitalText" /></td>
+        <td><a href="#" id="createLink">[Create]</a></td>
+    </tr>
+</table>
+<script>$(() => initializeTable());
+
+    function initializeTable() {
+        $('#createLink').click(createCountry);
+
+        appendCountry("Bulgaria", 'Sofia');
+        appendCountry("Germany", 'Berlin');
+        appendCountry("Russia", 'Moscow');
+        fixRow();
+
+        function createCountry() {
+            let country = $('#newCountryText').val();
+            let capital = $('#newCapitalText').val();
+
+            appendCountry(country, capital);
+
+            $('#newCountryText').val('');
+            $('#newCapitalText').val('');
+            fixRow();
+        }
+
+        function appendCountry(country, capital) {
+            let tr = $('<tr>');
+            tr.append($('<td>').text(country));
+            tr.append($('<td>').text(capital));
+
+            let delLink = $("<a href='#'>[Delete]</a>")
+                    .click(deleteItem);
+            let upLink = $("<a href='#'>[Up]</a>")
+                    .click(moveUp);
+            let downLink = $("<a href='#'>[Down]</a>")
+                    .click(moveDown);
+            tr.append($("<td>")
+                    .append(upLink)
+                    .append(" ")
+                    .append(downLink)
+                    .append(" ")
+                    .append(delLink)
+            );
+            $('#countriesTable').append(tr);
+
+        }
+
+        function moveDown() {
+            let row = $(this).parent().parent();
+            row.fadeOut(function () {
+                row.insertAfter(row.next());
+                row.fadeIn();
+                fixRow()
+            });
+        }
+
+        function moveUp() {
+            let row = $(this).parent().parent();
+            row.fadeOut(function () {
+                row.insertBefore(row.prev());
+                row.fadeIn();
+                fixRow()
+            });
+        }
+
+        function deleteItem() {
+            let row = $(this).parent().parent();
+            row.fadeOut(function () {
+                row.remove();
+                fixRow()
+            });
+        }
+
+        function fixRow() {
+            let rows = $("#countriesTable tr").toArray();
+            $(rows).find("td a").show();
+            $(rows[2]).find("td a:contains('Up')").hide();
+            $(rows[rows.length-1]).find("td a:contains('Down')").hide();
+        }
+    }
+
+</script>
+</body>
+</html>

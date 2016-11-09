@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timer</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+            crossorigin="anonymous"></script>
+    <style>
+        #timer {
+            font-size: 5em;
+        }
+    </style>
+</head>
+<body>
+<div id="timer">
+    <span id="hours" class="timer">00</span>:
+    <span id="minutes" class="timer">00</span>:
+    <span id="seconds" class="timer">00</span>
+    <button id="start-timer">Start</button>
+    <button id="stop-timer">Stop</button>
+</div>
+
+<script>
+    window.onload=function(){
+        timer();
+    }
+    
+    function timer() {
+        let seconds = $('#seconds');
+        let minutes = $('#minutes');
+        let hours = $('#hours');
+        let totalSec = 0;
+        let interval;
+
+        $('#start-timer').on('click',function () {
+            interval = setInterval(step,1000);
+            $('#start-timer').prop('disabled', true);
+            $('#stop-timer').prop('disabled', false);
+        });
+
+        $('#stop-timer').on('click',function () {
+            clearInterval(interval);
+            $('#start-timer').prop('disabled', false);
+            $('#stop-timer').prop('disabled', true);
+        });
+
+        function step() {
+            totalSec++;
+            let mins = Math.floor(totalSec/60);
+            let h = Math.floor(totalSec/3600);
+            seconds.text(pop(Number(totalSec%60)));
+            minutes.text(pop(Number(mins%60)));
+            hours.text(pop(Number(h)))
+
+        }
+
+        function pop(num) {
+            if(num<=9){
+                num = `0${num}`;
+            }
+            return num;
+        }
+    }
+</script>
+</body>
+</html>
